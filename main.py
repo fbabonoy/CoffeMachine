@@ -84,25 +84,27 @@ def make_drink(name):
             currentMoney.add_money(name.cost)
     start_order()
 
-# TODO round float to two decimal places
-# TODO what happpens if input is not a number like a STR
+
 def process_coins(cost):
     money_inserted = 0
     print("please insert $" + str(cost))
-    quarters = float(input("how many quarters? ")) * .25
-    dimes = float(input("how many dimes? ")) * .10
-    nickles = float(input("how many nickles? ")) * .05
-    pennies = float(input("how many pennies? ")) * .01
-    money_inserted = quarters + dimes + nickles + pennies
+    try:
+        quarters = float(input("how many quarters? ")) * .25
+        dimes = float(input("how many dimes? ")) * .10
+        nickles = float(input("how many nickles? ")) * .05
+        pennies = float(input("how many pennies? ")) * .01
+        money_inserted = quarters + dimes + nickles + pennies
+    except:
+        print("that is not a valid input")
+        return
     if money_inserted > cost:
         total = money_inserted - cost
-        print("your change is " + str(total))
+        print("your change is " + str(round(total, 2)))
         return True
     else:
         print("Sorry that's not enough money. Money refunded.")
 
 
-# what is needed and what is available
 def check_resources(name):
     if resources["water"] < name.water:
         print("Sorry there is not enough water.")
