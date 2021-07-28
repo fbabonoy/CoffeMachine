@@ -1,7 +1,4 @@
-# This is a sample Python script.
 import machine
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 
 MENU = {
     "espresso": {
@@ -58,11 +55,11 @@ def find_option(user_response):
     if user_response == "report":
         report()
     elif user_response == "espresso":
-        make_espresso()
+        make_drink(espresso)
     elif user_response == "latte":
-        make_latte()
+        make_drink(latte)
     elif user_response == "cappuccino":
-        make_cappuccino()
+        make_drink(cappuccino)
     elif user_response == "off":
         pass
     else:
@@ -70,7 +67,6 @@ def find_option(user_response):
         start_order()
 
 
-# TODO finish the report
 def report():
     print("Water: " + str(resources["water"]) + "ml")
     print("Milk " + str(resources["milk"]) + "ml")
@@ -79,26 +75,31 @@ def report():
     start_order()
 
 
-def make_espresso():
-    if check_resources(espresso):
-        resources["water"] -= espresso.water
-        resources["milk"] -= espresso.milk
-        resources["coffee"] -= espresso.coffee
-        currentMoney.add_money(espresso.cost)
-
+def make_drink(name):
+    if check_resources(name):
+        if process_coins(name.cost):
+            resources["water"] -= name.water
+            resources["milk"] -= name.milk
+            resources["coffee"] -= name.coffee
+            currentMoney.add_money(name.cost)
     start_order()
 
-
-def make_latte():
-
-    currentMoney.add_money(latte.cost)
-    start_order()
-
-
-def make_cappuccino():
-
-    currentMoney.add_money(cappuccino.cost)
-    start_order()
+# TODO round float to two decimal places
+# TODO what happpens if input is not a number like a STR
+def process_coins(cost):
+    money_inserted = 0
+    print("please insert $" + str(cost))
+    quarters = float(input("how many quarters? ")) * .25
+    dimes = float(input("how many dimes? ")) * .10
+    nickles = float(input("how many nickles? ")) * .05
+    pennies = float(input("how many pennies? ")) * .01
+    money_inserted = quarters + dimes + nickles + pennies
+    if money_inserted > cost:
+        total = money_inserted - cost
+        print("your change is " + str(total))
+        return True
+    else:
+        print("Sorry that's not enough money. Money refunded.")
 
 
 # what is needed and what is available
@@ -115,7 +116,6 @@ def check_resources(name):
     return True
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     espresso = create_menu_item("espresso")
     latte = create_menu_item("latte")
